@@ -165,6 +165,50 @@ async function downloadThumbnail(url, outputPath) {
   });
 }
 
+// Rename files based on ID3 tags
+async function renameFilesFromTags(videoDir) {
+  try {
+    const files = fs.readdirSync(videoDir);
+    log(`[Rename] Scanning ${files.length} files in ${videoDir}`);
+
+    for (const file of files) {
+      if (path.extname(file).toLowerCase() === '.mp3') {
+        const filePath = path.join(videoDir, file);
+        const tags = NodeID3.read(filePath);
+
+        if (tags && tags.title) {
+          const safeTitle = tags.title.replace(/[^\w\s-]/gi, '').trim();
+          const newFileName = `${safeTitle}.mp3`;
+          const newFilePath = path.join(videoDir, newFileName);
+
+          if (filePath !== newFilePath) {
+            try {
+              if (fs.existsSync(newFilePath)) {
+                // Handle duplicates
+                let counter = 1;
+                let tempPath = newFilePath;
+                while (fs.existsSync(tempPath)) {
+                  tempPath = path.join(videoDir, `${safeTitle} (${counter}).mp3`);
+                  counter++;
+                }
+                fs.renameSync(filePath, tempPath);
+                log(`[Rename] Renamed (duplicate): ${file} -> ${path.basename(tempPath)}`);
+              } else {
+                fs.renameSync(filePath, newFilePath);
+                log(`[Rename] Renamed: ${file} -> ${newFileName}`);
+              }
+            } catch (err) {
+              log(`[Rename] Error renaming ${file}: ${err.message}`);
+            }
+          }
+        }
+      }
+    }
+  } catch (error) {
+    log(`[Rename] Main error: ${error.message}`);
+  }
+}
+
 // Handle download request
 // Handle download request
 ipcMain.on('start-download', async (event, { url, format, isPlaylist }) => {
@@ -399,8 +443,16 @@ async function handlePlaylistDownload(event, url, format) {
     let failCount = 0;
 
     for (let i = 0; i < videos.length; i++) {
-      const video = videos[i];
-      const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+      const videoEntry = videos[i];
+      const videoUrl = `https://www.youtube.com/watch?v=${videoEntry.id}`;
+
+      // Fetch full video info
+      event.reply('download-status', `Fetching info for ${i + 1}/${videos.length}...`);
+      const video = await ytdlp(videoUrl, {
+        dumpSingleJson: true,
+        noWarnings: true,
+        noCheckCertificate: true
+      });
       const videoTitle = (video.title || `Video ${i + 1}`).replace(/[^\\w\\s-]/gi, '').trim();
 
       try {
@@ -498,6 +550,10 @@ async function handlePlaylistDownload(event, url, format) {
         // Continue with next video
       }
     }
+
+    // Rename files to match tags
+    event.reply('download-status', 'Verifying filenames...');
+    await renameFilesFromTags(outputFolder);
 
     // Send completion message
     const summary = `Playlist download complete! ${successCount} succeeded, ${failCount} failed.`;
