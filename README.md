@@ -29,7 +29,7 @@ A modern desktop application to download YouTube videos and audio with automatic
 
 ### Download Release (Easiest)
 
-1. Go to [Releases](https://github.com/taherx7/MusicYT-Downloader/releases)
+1. Go to [Releases](https://github.com/SuleMareVientu/MusicYT-Downloader/releases)
 2. Download the latest version
 3. Run the installer
 4. Launch the app
@@ -88,43 +88,19 @@ npm run build-linux  # For Linux
 }
 ```
 
-## 🤝 Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 🐛 Known Issues
-
-- Large videos (1GB+) may take time to download
-- Some region-restricted videos may not be accessible
-
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
+## 👤 Original Author
 
 **taherx7**
 
-- GitHub: [@taherx7](https://github.com/taherx7)
-- Repository: [MusicYT-Downloader](https://github.com/taherx7/MusicYT-Downloader)
-
-## ⭐ Show your support
-
-Give a ⭐️ if this project helped you!
+- GitHub: [@taherx7](https://github.com/SuleMareVientu)
+- Repository: [MusicYT-Downloader](https://github.com/SuleMareVientu/MusicYT-Downloader)
 
 ## 🙏 Acknowledgments
 
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Powerful YouTube downloader
 - [Electron](https://www.electronjs.org/) - Desktop app framework
 - [FFmpeg](https://ffmpeg.org/) - Multimedia processing
-
----
-
-Made with ❤️ by taherx7
