@@ -38,7 +38,7 @@ A modern desktop application to download YouTube videos and audio with automatic
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/taherx7/MusicYT-Downloader.git
+git clone https://github.com/SuleMareVientu/MusicYT-Downloader.git
 cd MusicYT-Downloader
 ```
 
