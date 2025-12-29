@@ -326,7 +326,7 @@ async function handleSingleDownload(event, url, format) {
       await new Promise((resolve, reject) => {
         ffmpeg(tempAudioPath)
           .toFormat('mp3')
-          .audioBitrate('320k')
+          .audioBitrate('128k')
           .on('progress', (progress) => {
             if (progress.percent) {
               event.reply('download-progress', Math.round(progress.percent));
@@ -511,7 +511,7 @@ async function handlePlaylistDownload(event, url, format) {
             await new Promise((resolve, reject) => {
               ffmpeg(tempAudioPath)
                 .toFormat('mp3')
-                .audioBitrate('320k')
+                .audioBitrate('128k')
                 .on('end', resolve)
                 .on('error', reject)
                 .save(outputPath);
